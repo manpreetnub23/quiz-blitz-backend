@@ -1,5 +1,5 @@
 import redis from "../../config/redis.js";
-import { getRoom, saveRoom } from "../room/room.service.js";
+import { getPlayerIdFromSocket, getRoom, saveRoom } from "../room/room.service.js";
 
 const DEFAULT_PREPARE_TIME = Number(process.env.WAITTIME || 5000);
 const DEFAULT_QUESTION_TIME = Number(process.env.ATTEMPTTIME || 10000);
@@ -197,7 +197,7 @@ export const submitAnswer = async ({ roomCode, socketId, playerId, answer }) => 
 		return { accepted: false, reason: "Invalid option" };
 	}
 
-	const participantId = playerId || socketId;
+	const participantId = playerId || getPlayerIdFromSocket(room, socketId);
 	if (participantId === room.hostId) {
 		return { accepted: false, reason: "Host cannot submit answers" };
 	}
