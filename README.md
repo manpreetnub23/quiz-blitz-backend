@@ -75,7 +75,7 @@ Supported providers:
 
 Notes:
 
-- `WAITTIME` and `ATTEMPTTIME` are in milliseconds.
+- `WAITTIME` and `ATTEMPTTIME` accept milliseconds (`5000`) or whole seconds (`5`).
 - Keep `AI_API_KEY` secret and never commit it.
 
 ## Install and Run

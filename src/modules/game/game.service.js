@@ -1,8 +1,17 @@
 import redis from "../../config/redis.js";
 import { getPlayerIdFromSocket, getRoom, saveRoom } from "../room/room.service.js";
 
-const DEFAULT_PREPARE_TIME = Number(process.env.WAITTIME || 5000);
-const DEFAULT_QUESTION_TIME = Number(process.env.ATTEMPTTIME || 10000);
+const parseDurationMs = (value, fallbackMs) => {
+	const parsed = Number(value);
+
+	if (!Number.isFinite(parsed) || parsed <= 0) return fallbackMs;
+
+	// Accept plain seconds like "5" while preserving existing millisecond values like "5000".
+	return parsed < 1000 ? parsed * 1000 : parsed;
+};
+
+const DEFAULT_PREPARE_TIME = parseDurationMs(process.env.WAITTIME, 5000);
+const DEFAULT_QUESTION_TIME = parseDurationMs(process.env.ATTEMPTTIME, 10000);
 const timers = new Map();
 
 const answerKey = (roomCode, questionIndex) => `answers:${roomCode}:${questionIndex}`;
